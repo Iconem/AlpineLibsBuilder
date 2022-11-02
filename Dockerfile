@@ -67,7 +67,7 @@ RUN mkdir PotreeConverter1.7 && cd PotreeConverter1.7 && wget -O ./PotreeConvert
 
 
 
-COPY ./PNPSolver /home/executables/PNPSolver
+COPY ./src/PNPSolver /home/executables/PNPSolver
 
 # Build solver executable
 RUN cd /home/executables/PNPSolver && cmake . && make
