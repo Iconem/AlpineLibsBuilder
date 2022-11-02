@@ -6,6 +6,23 @@ Un utilitaire permettant de générer des exécutables compatibles alpine (versi
 - PotreeConverter2.1
 - camCalibNode (solveur PNP)
 
-## Usage
+## Build
+Attention : il peut être nécessaire de lancer la commande avec les droits admin.
 `sh build.sh`
 Les exécutables sont générés dans le dossier `build`.
+
+## Lancement des exécutables
+
+### PotreeConverter1.7
+cd build/PotreeConverter1.7
+mv lib/* /usr/local/lib
+./PotreeConverter
+
+### PotreeConverter2.1
+cd build/PotreeConverter2.1
+./PotreeConverter
+
+### camCalibNode
+cd build/PNPSolver
+mv lib/* /usr/local/lib
+./camCalibNode
