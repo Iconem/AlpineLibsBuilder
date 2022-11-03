@@ -1,28 +1,50 @@
 # AlpineLibsBuilder
 
-## Objectif
-Un utilitaire permettant de générer des exécutables compatibles alpine (version: **node:16.14.0-alpine3.15**) :
+To build alpine-compatible versions of the following executables:
 - PotreeConverter1.7
 - PotreeConverter2.1
-- camCalibNode (solveur PNP)
+- camCalibNode (PNP solver)
+(alpine version: **node:16.14.0-alpine3.15**) 
 
-## Build
-Attention : il peut être nécessaire de lancer la commande avec les droits admin.
-`sh build.sh`
-Les exécutables sont générés dans le dossier `build`.
+## Build the executables
+You must launch the command with admin rights :
+```
+	sh build.sh
+```
+Executables (+ the needed dependencies) are generated in the `build` folder.
 
-## Lancement des exécutables
+## Use the build
 
 ### PotreeConverter1.7
-cd build/PotreeConverter1.7
-mv lib/* /usr/local/lib
-./PotreeConverter
+Add the following lines to your Dockerfile :
+```
+WORKDIR /home/lib
+RUN mkdir PotreeConverter1.7 && cd PotreeConverter1.7 \
+  && wget https://github.com/Iconem/AlpineLibsBuilder/releases/download/${version}/PotreeConverter1.7.tar \
+  && tar -xf PotreeConverter1.7.tar \
+  && cp lib/* /usr/local/lib/ \
+  && rm PotreeConverter1.7.tar
+```
+
 
 ### PotreeConverter2.1
-cd build/PotreeConverter2.1
-./PotreeConverter
+Add the following lines to your Dockerfile :
+```
+RUN apk update && apk add libtbb
+WORKDIR /home/lib
+RUN mkdir PotreeConverter2.1 && cd PotreeConverter2.1 \
+  && wget https://github.com/Iconem/AlpineLibsBuilder/releases/download/${version}/PotreeConverter2.1.tar \
+  && tar -xf PotreeConverter2.1.tar \
+  && rm PotreeConverter2.1.tar
+```
 
 ### camCalibNode
-cd build/PNPSolver
-mv lib/* /usr/local/lib
-./camCalibNode
+Add the following lines to your Dockerfile :
+```
+WORKDIR /home/lib
+RUN mkdir PNPSolver && cd PNPSolver \
+  && wget https://github.com/Iconem/AlpineLibsBuilder/releases/download/${version}/PNPSolver.tar \
+  && tar -xf PNPSolver.tar \
+  && cp lib/* /usr/local/lib/ \
+  && rm PNPSolver.tar
+```

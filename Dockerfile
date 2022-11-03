@@ -23,8 +23,9 @@ RUN mkdir opencv3.1.0 && cd opencv3.1.0 \
 RUN git clone https://github.com/m-schuetz/LAStools.git \
   && cd LAStools/LASzip && mkdir build && cd build \
   && cmake -DCMAKE_BUILD_TYPE=Release .. \
-  && make
-
+  && make \
+  && cp /home/lib/LAStools/LASzip/dll/* /usr/local/lib \
+  && cp /home/lib/LAStools/LASzip/build/src/liblaszip.so /usr/local/lib
 
 WORKDIR /home/executables
 # download and build PotreeConverter v2.1
@@ -59,17 +60,11 @@ RUN mkdir PotreeConverter1.7 && cd PotreeConverter1.7 && wget -O ./PotreeConvert
   && sed -i '298i\\t\t\t\t\tPotree::Point point = reader->getPoint();' PotreeConverter/src/PotreeWriter.cpp \
   && sed -i '299i\\t\t\t\t\twriter->write(point);' PotreeConverter/src/PotreeWriter.cpp \
   && mkdir build && cd build \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DLASZIP_INCLUDE_DIRS=/home/lib/LAStools/LASzip/dll -DLASZIP_LIBRARY=/home/lib/LAStools/LASzip/build/src/liblaszip.so ..  \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DLASZIP_INCLUDE_DIRS=/usr/local/lib -DLASZIP_LIBRARY=/usr/local/lib/liblaszip.so ..  \
   && make \
   && chmod +x PotreeConverter/PotreeConverter \
   && chown -R node PotreeConverter/PotreeConverter
 
-
-
-
-COPY ./src/PNPSolver /home/executables/PNPSolver
-
 # Build solver executable
+COPY ./src/PNPSolver /home/executables/PNPSolver
 RUN cd /home/executables/PNPSolver && cmake . && make
-
-RUN chown -R node /home/lib
